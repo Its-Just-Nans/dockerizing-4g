@@ -1,0 +1,141 @@
+version: "3.9"
+services:
+    ue:
+        cap_add:
+            - "sys_nice"
+        build:
+            context: ue
+            dockerfile: ue.Dockerfile
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.9 # TODO
+        tty: true
+    enb:
+        depends_on:
+            - core_mme
+        cap_add:
+            - "sys_nice"
+        build:
+            context: enb
+            dockerfile: enb.Dockerfile
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.10 # TODO
+        tty: true
+    core_pcrf:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+        build:
+            context: core
+            dockerfile: pcrf.Dockerfile
+        volumes:
+            - ./core/pcrf.log:/app/open5gs/install/var/log/open5gs/pcrf.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.40
+    core_sgwc:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+        build:
+            context: core
+            dockerfile: sgwc.Dockerfile
+        volumes:
+            - ./core/sgwc.log:/app/open5gs/install/var/log/open5gs/sgwc.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.41
+    core_sgwu:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+        build:
+            context: core
+            dockerfile: sgwu.Dockerfile
+        volumes:
+            - ./core/sgwu.log:/app/open5gs/install/var/log/open5gs/sgwu.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.49
+    core_hss:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+        build:
+            context: core
+            dockerfile: hss.Dockerfile
+        volumes:
+            - ./core/hss.log:/app/open5gs/install/var/log/open5gs/hss.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.51
+    core_mme:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+        build:
+            context: core
+            dockerfile: mme.Dockerfile
+        volumes:
+            - ./core/mme.log:/app/open5gs/install/var/log/open5gs/mme.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.52
+        expose:
+            - "3868/udp"
+            - "3868/tcp"
+            - "3868/sctp"
+            - "5868/udp"
+            - "5868/tcp"
+            - "5868/sctp"
+            - "36412/sctp"
+            - "2123/udp"
+            - "9091/tcp"
+    webui:
+        depends_on:
+            - mongo
+        ports:
+            - "9999:9999" # webui
+        build:
+            context: .
+            dockerfile: ./core/webui.Dockerfile
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.60
+        environment:
+            DB_URI: "mongodb://admin:1423@192.168.0.61/open5gs?authSource=admin"
+            HOSTNAME: "0.0.0.0"
+            PORT: "9999"
+    mongo:
+        image: mongo
+        command: --quiet
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: "admin"
+            MONGO_INITDB_ROOT_PASSWORD: "1423"
+            MONGO_INITDB_DATABASE: "open5gs"
+        volumes:
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+            - ./db:/data/db
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.61
+
+networks:
+    vpcbr:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.0.0.0/16
+                  gateway: 10.0.0.1
+    core-network:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.0.0/24
+                  gateway: 192.168.0.1

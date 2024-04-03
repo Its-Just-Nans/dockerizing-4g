@@ -1,0 +1,19 @@
+logger:
+  file: /app/open5gs/install/var/log/open5gs/sgwu.log
+  level: warn # fatal|error|warn|info(default)|debug|trace
+
+global:
+  max:
+    ue: 1024 # The number of UE can be increased depending on memory size.
+#    peer: 64
+
+sgwu:
+  pfcp:
+    server:
+      - address: 192.168.0.49
+    client:
+  #      sgwc:    # SGW-U PFCP Client try to associate SGW-C PFCP Server
+  #        - address: 127.0.0.3
+  gtpu:
+    server:
+      - address: 192.168.0.49
