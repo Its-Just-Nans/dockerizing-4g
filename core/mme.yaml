@@ -1,6 +1,6 @@
 logger:
   file: /app/open5gs/install/var/log/open5gs/mme.log
-  level: warn # fatal|error|warn|info(default)|debug|trace
+  level: info # fatal|error|warn|info(default)|debug|trace
 
 global:
   max:

@@ -3,9 +3,12 @@ services:
     ue:
         cap_add:
             - "sys_nice"
+            - "NET_ADMIN"
         build:
             context: ue
             dockerfile: ue.Dockerfile
+        volumes:
+            - ./ue/ue.log:/app/ue.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.9 # TODO
@@ -18,6 +21,8 @@ services:
         build:
             context: enb
             dockerfile: enb.Dockerfile
+        volumes:
+            - ./enb/enb.log:/app/enb.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.10 # TODO
