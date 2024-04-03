@@ -34,6 +34,5 @@ COPY ./ue.conf /app/ue.conf
 
 CMD ["/app/srsRAN_4G/build/srsue/src/srsue", \
     "--rf.device_name=zmq", \
-    "--rf.device_args='tx_port=tcp://*:2001,rx_port=tcp://localhost:2000,id=ue,base_srate=23.04e6'", \
-    "--gw.netns=ue1", \
+    "--rf.device_args='tx_port=tcp://192.168.0.9:2001,rx_port=tcp://192.168.0.10:2000,id=ue,base_srate=23.04e6'", \
     "/app/ue.conf"]
