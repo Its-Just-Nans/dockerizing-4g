@@ -1,4 +1,4 @@
 db/
-core/*.log
+core/**/*.log
 ue/*.log
 enb/*.log

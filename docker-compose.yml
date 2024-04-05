@@ -29,16 +29,44 @@ services:
             frontier:
                 ipv4_address: 192.168.50.10
         tty: true
-    core_pcrf:
+    core_smf:
         cap_add:
             - "NET_ADMIN"
         depends_on:
             - mongo
         build:
-            context: core
+            context: core/smf
+            dockerfile: smf.Dockerfile
+        volumes:
+            - ./core/smf/smf.log:/app/open5gs/install/var/log/open5gs/smf.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.62
+    core_upf:
+        cap_add:
+            - "NET_ADMIN"
+        privileged: true
+        depends_on:
+            - mongo
+        build:
+            context: core/upf
+            dockerfile: upf.Dockerfile
+        volumes:
+            - ./core/upf/upf.log:/app/open5gs/install/var/log/open5gs/upf.log:rw
+        networks:
+            core-network:
+                ipv4_address: 192.168.0.63
+    core_pcrf:
+        cap_add:
+            - "NET_ADMIN"
+        depends_on:
+            - mongo
+            - core_hss
+        build:
+            context: core/pcrf
             dockerfile: pcrf.Dockerfile
         volumes:
-            - ./core/pcrf.log:/app/open5gs/install/var/log/open5gs/pcrf.log:rw
+            - ./core/pcrf/pcrf.log:/app/open5gs/install/var/log/open5gs/pcrf.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.40
@@ -48,10 +76,10 @@ services:
         depends_on:
             - mongo
         build:
-            context: core
+            context: core/sgwc
             dockerfile: sgwc.Dockerfile
         volumes:
-            - ./core/sgwc.log:/app/open5gs/install/var/log/open5gs/sgwc.log:rw
+            - ./core/sgwc/sgwc.log:/app/open5gs/install/var/log/open5gs/sgwc.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.41
@@ -61,23 +89,25 @@ services:
         depends_on:
             - mongo
         build:
-            context: core
+            context: core/sgwu
             dockerfile: sgwu.Dockerfile
         volumes:
-            - ./core/sgwu.log:/app/open5gs/install/var/log/open5gs/sgwu.log:rw
+            - ./core/sgwu/sgwu.log:/app/open5gs/install/var/log/open5gs/sgwu.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.49
+            frontier:
+                ipv4_address: 192.168.50.40
     core_hss:
         cap_add:
             - "NET_ADMIN"
         depends_on:
             - mongo
         build:
-            context: core
+            context: core/hss
             dockerfile: hss.Dockerfile
         volumes:
-            - ./core/hss.log:/app/open5gs/install/var/log/open5gs/hss.log:rw
+            - ./core/hss/hss.log:/app/open5gs/install/var/log/open5gs/hss.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.51
@@ -86,34 +116,25 @@ services:
             - "NET_ADMIN"
         depends_on:
             - mongo
+            - core_hss
         build:
-            context: core
+            context: core/mme
             dockerfile: mme.Dockerfile
         volumes:
-            - ./core/mme.log:/app/open5gs/install/var/log/open5gs/mme.log:rw
+            - ./core/mme/mme.log:/app/open5gs/install/var/log/open5gs/mme.log:rw
         networks:
             core-network:
                 ipv4_address: 192.168.0.52
             frontier:
                 ipv4_address: 192.168.50.20
-        expose:
-            - "3868/udp"
-            - "3868/tcp"
-            - "3868/sctp"
-            - "5868/udp"
-            - "5868/tcp"
-            - "5868/sctp"
-            - "36412/sctp"
-            - "2123/udp"
-            - "9091/tcp"
     webui:
         depends_on:
             - mongo
         ports:
             - "9999:9999" # webui
         build:
-            context: .
-            dockerfile: ./core/webui.Dockerfile
+            context: core/webui
+            dockerfile: webui.Dockerfile
         networks:
             core-network:
                 ipv4_address: 192.168.0.60

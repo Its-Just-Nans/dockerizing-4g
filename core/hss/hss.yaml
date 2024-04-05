@@ -1,7 +1,7 @@
 db_uri: mongodb://admin:1423@192.168.0.61/open5gs?authSource=admin
 logger:
   file: /app/open5gs/install/var/log/open5gs/hss.log
-#  level: info   # fatal|error|warn|info(default)|debug|trace
+  level: info # fatal|error|warn|info(default)|debug|trace
 
 global:
   max:

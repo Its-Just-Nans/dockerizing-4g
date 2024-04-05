@@ -33,6 +33,8 @@ RUN ninja install
 WORKDIR /app/open5gs/
 RUN apt install -y fd-find
 
-COPY ./mme.yaml /app/open5gs/install/etc/open5gs/mme.yaml
+COPY ./hss.yaml /app/open5gs/install/etc/open5gs/hss.yaml
 
-CMD ["/app/open5gs/install/bin/open5gs-mmed"]
+COPY ./hss_freediameter.conf /app/open5gs/install/etc/freeDiameter/hss.conf
+
+CMD ["/app/open5gs/install/bin/open5gs-hssd"]

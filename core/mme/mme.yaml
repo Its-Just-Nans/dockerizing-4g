@@ -17,7 +17,7 @@ mme:
       - address: 192.168.0.52 # mme
     client:
       sgwc:
-        - address: 192.168.50.10
+        - address: 192.168.0.41
       smf: # Session Management Funtion
         - address: 192.168.0.51 # hss
   metrics:
