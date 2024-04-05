@@ -10,8 +10,8 @@ services:
         volumes:
             - ./ue/ue.log:/app/ue.log:rw
         networks:
-            core-network:
-                ipv4_address: 192.168.0.9 # TODO
+            air:
+                ipv4_address: 192.168.128.5
         tty: true
     enb:
         depends_on:
@@ -24,6 +24,8 @@ services:
         volumes:
             - ./enb/enb.log:/app/enb.log:rw
         networks:
+            air:
+                ipv4_address: 192.168.128.6
             core-network:
                 ipv4_address: 192.168.0.10 # TODO
         tty: true
@@ -144,3 +146,9 @@ networks:
             config:
                 - subnet: 192.168.0.0/24
                   gateway: 192.168.0.1
+    air:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.128.0/24
+                  gateway: 192.168.128.1

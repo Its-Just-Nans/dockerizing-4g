@@ -38,7 +38,7 @@ COPY ./sib.conf /app/sib.conf
 
 CMD ["/app/srsRAN_4G/build/srsenb/src/srsenb", \
     "--rf.device_name=zmq", \
-    "--rf.device_args='fail_on_disconnect=true,tx_port=tcp://192.168.0.10:2000,rx_port=tcp://192.168.0.9:2001,id=enb,base_srate=23.04e6'", \
+    "--rf.device_args='fail_on_disconnect=true,tx_port=tcp://192.168.128.6:2000,rx_port=tcp://192.168.128.5:2001,id=enb,base_srate=23.04e6'", \
     "--enb_files.sib_config", "/app/sib.conf", \
     "--enb_files.rr_config", "/app/rr.conf", \
     "--enb_files.rb_config", "/app/rb.conf", \
