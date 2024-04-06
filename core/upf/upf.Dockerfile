@@ -33,6 +33,10 @@ RUN ninja install
 WORKDIR /app/open5gs/
 RUN apt install -y fd-find
 
+RUN apt install -y iptables
+
 COPY ./upf.yaml /app/open5gs/install/etc/open5gs/upf.yaml
 
-CMD ["/app/open5gs/install/bin/open5gs-upfd"]
+COPY ./upf.sh /app/upf.sh
+
+CMD ["/app/upf.sh"]

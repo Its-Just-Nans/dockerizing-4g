@@ -32,7 +32,9 @@ RUN cd /app/srsRAN_4G/build && srsran_install_configs.sh user
 
 COPY ./ue.conf /app/ue.conf
 
-CMD ["/app/srsRAN_4G/build/srsue/src/srsue", \
-    "--rf.device_name=zmq", \
-    "--rf.device_args='tx_port=tcp://192.168.128.5:2001,rx_port=tcp://192.168.128.6:2000,id=ue,base_srate=23.04e6'", \
-    "/app/ue.conf"]
+
+RUN apt install -y iproute2 iputils-ping curl
+
+COPY ./ue.sh /app/ue.sh
+
+CMD ["/app/ue.sh"]

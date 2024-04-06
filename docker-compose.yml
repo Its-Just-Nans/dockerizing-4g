@@ -35,7 +35,6 @@ services:
             - "NET_ADMIN"
         depends_on:
             - mongo
-            - core_pcrf
         build:
             context: core/smf
             dockerfile: smf.Dockerfile
@@ -65,7 +64,6 @@ services:
             - "NET_ADMIN"
         depends_on:
             - mongo
-            - core_hss
         build:
             context: core/pcrf
             dockerfile: pcrf.Dockerfile
