@@ -4,7 +4,7 @@ services:
         cap_add:
             - "sys_nice"
             - "NET_ADMIN"
-        privileged: true
+        privileged: true # create namespace tun_ue
         build:
             context: ue
             dockerfile: ue.Dockerfile
@@ -46,7 +46,8 @@ services:
     core_upf:
         cap_add:
             - "NET_ADMIN"
-        privileged: true
+            - "NET_RAW"
+        privileged: true # open /dev/net/tun
         depends_on:
             - mongo
         build:
@@ -152,7 +153,7 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: "1423"
             MONGO_INITDB_DATABASE: "open5gs"
         volumes:
-            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+            - ./core/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
             - ./db:/data/db
         networks:
             core-network:
