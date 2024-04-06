@@ -4,6 +4,7 @@ services:
         cap_add:
             - "sys_nice"
             - "NET_ADMIN"
+        privileged: true
         build:
             context: ue
             dockerfile: ue.Dockerfile
@@ -34,6 +35,7 @@ services:
             - "NET_ADMIN"
         depends_on:
             - mongo
+            - core_pcrf
         build:
             context: core/smf
             dockerfile: smf.Dockerfile
@@ -56,6 +58,8 @@ services:
         networks:
             core-network:
                 ipv4_address: 192.168.0.63
+            frontier:
+                ipv4_address: 192.168.50.50
     core_pcrf:
         cap_add:
             - "NET_ADMIN"

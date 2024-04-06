@@ -19,7 +19,7 @@ mme:
       sgwc:
         - address: 192.168.0.41
       smf: # Session Management Funtion
-        - address: 192.168.0.51 # hss
+        - address: 192.168.0.62
   metrics:
     server:
       - address: 127.0.0.2

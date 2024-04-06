@@ -7,3 +7,7 @@ What about [open5gs](https://github.com/open5gs/open5gs) and [srsRAN](https://gi
 ```sh
 docker compose up --force-recreate --build
 ```
+
+```sh
+docker compose logs ue -f
+```
