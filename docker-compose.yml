@@ -41,7 +41,7 @@ services:
         volumes:
             - ./core/smf/smf.log:/app/open5gs/install/var/log/open5gs/smf.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.62
     core_upf:
         cap_add:
@@ -56,10 +56,8 @@ services:
         volumes:
             - ./core/upf/upf.log:/app/open5gs/install/var/log/open5gs/upf.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.63
-            frontier:
-                ipv4_address: 192.168.50.50
     core_pcrf:
         cap_add:
             - "NET_ADMIN"
@@ -71,8 +69,8 @@ services:
         volumes:
             - ./core/pcrf/pcrf.log:/app/open5gs/install/var/log/open5gs/pcrf.log:rw
         networks:
-            core-network:
-                ipv4_address: 192.168.0.40
+            core_network:
+                ipv4_address: 192.168.0.59
     core_sgwc:
         cap_add:
             - "NET_ADMIN"
@@ -84,7 +82,7 @@ services:
         volumes:
             - ./core/sgwc/sgwc.log:/app/open5gs/install/var/log/open5gs/sgwc.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.41
     core_sgwu:
         cap_add:
@@ -97,7 +95,7 @@ services:
         volumes:
             - ./core/sgwu/sgwu.log:/app/open5gs/install/var/log/open5gs/sgwu.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.49
             frontier:
                 ipv4_address: 192.168.50.40
@@ -112,7 +110,7 @@ services:
         volumes:
             - ./core/hss/hss.log:/app/open5gs/install/var/log/open5gs/hss.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.51
     core_mme:
         cap_add:
@@ -126,7 +124,7 @@ services:
         volumes:
             - ./core/mme/mme.log:/app/open5gs/install/var/log/open5gs/mme.log:rw
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.52
             frontier:
                 ipv4_address: 192.168.50.20
@@ -139,7 +137,7 @@ services:
             context: core/webui
             dockerfile: webui.Dockerfile
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.60
         environment:
             DB_URI: "mongodb://admin:1423@192.168.0.61/open5gs?authSource=admin"
@@ -156,7 +154,7 @@ services:
             - ./core/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
             - ./db:/data/db
         networks:
-            core-network:
+            core_network:
                 ipv4_address: 192.168.0.61
 
 networks:
@@ -166,7 +164,7 @@ networks:
             config:
                 - subnet: 192.168.50.0/24
                   gateway: 192.168.50.1
-    core-network:
+    core_network:
         driver: bridge
         ipam:
             config:
